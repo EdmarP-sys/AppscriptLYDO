@@ -47,6 +47,13 @@ export default function Page() {
   // Admin Manage Deadlines Form States
   const [dlTitle, setDlTitle] = useState('');
   const [dlDate, setDlDate] = useState('');
+
+  // Report Concern States
+  const [isConcernOpen, setIsConcernOpen] = useState(false);
+  const [concernCategory, setConcernCategory] = useState('General Concern');
+  const [concernDescription, setConcernDescription] = useState('');
+  const [concernLoading, setConcernLoading] = useState(false);
+  const [concernMsg, setConcernMsg] = useState({ text: '', isError: false });
   const [dlSaving, setDlSaving] = useState(false);
 
   // Admin Manage Accounts Form States
@@ -410,6 +417,29 @@ export default function Page() {
       fetchUsers();
     } catch (err) {
       alert(err.message);
+    }
+  };
+
+  const handleConcernSubmit = async (e) => {
+    e.preventDefault();
+    setConcernMsg({ text: '', isError: false });
+    setConcernLoading(true);
+    try {
+      const res = await fetch('/api/submitIssue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: concernCategory, description: concernDescription })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to submit concern.');
+
+      setConcernMsg({ text: data.message || 'Concern submitted successfully.', isError: false });
+      setConcernDescription('');
+      setTimeout(() => setIsConcernOpen(false), 1500);
+    } catch (err) {
+      setConcernMsg({ text: err.message, isError: true });
+    } finally {
+      setConcernLoading(false);
     }
   };
 
@@ -1106,6 +1136,83 @@ export default function Page() {
           </div>
         )}
       </main>
+
+      {/* Floating Report Concern Button */}
+      {user && (
+        <button
+          onClick={() => {
+            setConcernCategory('General Concern');
+            setConcernDescription('');
+            setConcernMsg({ text: '', isError: false });
+            setIsConcernOpen(true);
+          }}
+          className="fixed bottom-6 right-6 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full shadow-lg border border-emerald-500/30 flex items-center gap-2 font-bold text-xs transition-all hover:scale-105 glow-btn z-50 cursor-pointer"
+        >
+          <svg className="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          Report Concern
+        </button>
+      )}
+
+      {/* Report Concern Modal */}
+      {isConcernOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] animate-in fade-in duration-200">
+          <div className="w-full max-w-md glass-panel border border-gold/25 rounded-2xl overflow-hidden shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 p-6 flex flex-col gap-4">
+            <div className="flex justify-between items-center border-b border-white/10 pb-3">
+              <h3 className="text-lg font-bold text-gold-gradient">Report a Concern</h3>
+              <button
+                onClick={() => setIsConcernOpen(false)}
+                className="text-white/40 hover:text-white transition-all text-xl cursor-pointer"
+              >
+                &times;
+              </button>
+            </div>
+
+            {concernMsg.text && (
+              <div className={`p-3 text-xs rounded-lg ${concernMsg.isError ? 'bg-red-500/10 border border-red-500/20 text-red-400' : 'bg-green-500/10 border border-green-500/20 text-green-400'}`}>
+                {concernMsg.text}
+              </div>
+            )}
+
+            <form onSubmit={handleConcernSubmit} className="flex flex-col gap-4">
+              <div className="flex flex-col">
+                <label className="input-label text-xs">Concern Category *</label>
+                <select
+                  value={concernCategory}
+                  onChange={e => setConcernCategory(e.target.value)}
+                  className="input-field text-xs cursor-pointer"
+                >
+                  <option value="General Concern" className="bg-forest-dark text-white">General Concern</option>
+                  <option value="Technical Issue" className="bg-forest-dark text-white">Technical Issue</option>
+                  <option value="Data Discrepancy" className="bg-forest-dark text-white">Data Discrepancy</option>
+                  <option value="Scholar Portal Issue" className="bg-forest-dark text-white">Scholar Portal Issue</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="input-label text-xs">Description *</label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Describe the issue or concern in detail..."
+                  value={concernDescription}
+                  onChange={e => setConcernDescription(e.target.value)}
+                  className="input-field text-xs resize-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={concernLoading}
+                className="w-full py-2.5 bg-gold-gradient text-forest-dark font-bold text-xs rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-md glow-btn cursor-pointer disabled:opacity-50"
+              >
+                {concernLoading ? 'Submitting...' : 'Submit Concern'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
