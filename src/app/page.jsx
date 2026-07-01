@@ -7,6 +7,7 @@ import DocumentTable from './components/DocumentTable';
 import ScholarRegistrationModal from './components/ScholarRegistrationModal';
 import ScholarDashboard from './components/ScholarDashboard';
 import AdminScholarTracker from './components/AdminScholarTracker';
+import AnalyticsTab from './components/AnalyticsTab';
 import { BARANGAYS, LYDC_CENTERS } from './api/_utils/constants';
 
 export default function Page() {
@@ -598,7 +599,6 @@ export default function Page() {
                   value={selectedEntity}
                   onChange={e => setSelectedEntity(e.target.value)}
                   className="input-field text-xs py-2 px-3 min-w-[200px] cursor-pointer"
-                  disabled={user.role !== 'admin'}
                 >
                   <optgroup label="Barangays" className="bg-forest-dark text-white font-semibold">
                     {BARANGAYS.map(b => (
@@ -726,6 +726,11 @@ export default function Page() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* TAB 1.5: ANALYTICS DASHBOARD (ADMIN & OFFICERS) */}
+        {activeTab === 'analytics' && user && user.role !== 'scholar' && (
+          <AnalyticsTab />
         )}
 
         {/* TAB 2: PENDING APPROVALS QUEUE (ADMIN ONLY) */}

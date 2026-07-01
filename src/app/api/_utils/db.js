@@ -261,7 +261,28 @@ function resolveMockQuery(text, params = []) {
     return { rows: [{ count: scholars.length }] };
   }
 
-  // 13. Trend Data query (date_trunc)
+  // 13. Three-Month Trend query (sub_category, month, count)
+  if (sql.includes('SELECT sub_category as "subCategory"') && sql.includes("date_trunc('month', created_at) as month")) {
+    const groups = {};
+    const now = new Date();
+    const cutoff = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+    
+    mockDocuments.filter(d => d.status === 'Approved' && new Date(d.created_at) >= cutoff).forEach(d => {
+      const date = new Date(d.created_at);
+      const firstOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).toISOString();
+      const key = `${d.sub_category}|${firstOfMonth}`;
+      groups[key] = (groups[key] || 0) + 1;
+    });
+
+    const rows = Object.entries(groups).map(([key, count]) => {
+      const [subCategory, month] = key.split('|');
+      return { subCategory, month, count };
+    });
+
+    return { rows, rowCount: rows.length };
+  }
+
+  // 13.5 General Trend Data query (date_trunc)
   if (sql.includes("date_trunc('month', created_at) as month")) {
     // return empty stats or mock trend
     return { rows: [], rowCount: 0 };
