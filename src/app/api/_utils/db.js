@@ -10,8 +10,9 @@ function getPool() {
     }
 
     if (!global._postgresPool) {
+      const cleanUrl = url.split('?')[0];
       global._postgresPool = new Pool({
-        connectionString: url,
+        connectionString: cleanUrl,
         ssl: {
           rejectUnauthorized: false
         }
