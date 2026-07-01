@@ -218,7 +218,7 @@ export default function Page() {
     try {
       const res = await fetch('/api/admin/getConcerns');
       const data = await res.json();
-      if (res.ok) setConcernsList(data);
+      if (res.ok) setConcernsList(Array.isArray(data) ? data : data.rows || []);
     } catch (err) {
       console.error('Failed to load concerns:', err);
     }

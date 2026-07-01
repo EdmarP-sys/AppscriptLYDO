@@ -24,7 +24,7 @@ export async function GET(req) {
     `);
 
     const result = await query('SELECT * FROM concerns ORDER BY timestamp DESC');
-    return NextResponse.json(result);
+    return NextResponse.json(result.rows);
   } catch (err) {
     console.error('getConcerns API error:', err);
     return NextResponse.json({ error: 'Failed to fetch concerns.' }, { status: 500 });
