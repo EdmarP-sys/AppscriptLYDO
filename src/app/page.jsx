@@ -165,7 +165,7 @@ export default function Page() {
       const res = await fetch(`/api/getDocuments?entity=${encodeURIComponent(entity)}`);
       const data = await res.json();
       if (res.ok) {
-        setDocuments(data);
+        setDocuments(Array.isArray(data) ? data : []);
       }
     } catch (err) {
       console.error('Failed to load documents:', err);
@@ -178,7 +178,7 @@ export default function Page() {
     try {
       const res = await fetch('/api/getPendingApprovals');
       const data = await res.json();
-      if (res.ok) setPendingDocs(data);
+      if (res.ok) setPendingDocs(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Pending load error:', err);
     }
@@ -188,7 +188,7 @@ export default function Page() {
     try {
       const res = await fetch('/api/getDeadlines');
       const data = await res.json();
-      if (res.ok) setDeadlines(data);
+      if (res.ok) setDeadlines(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Deadlines load error:', err);
     }
@@ -198,7 +198,7 @@ export default function Page() {
     try {
       const res = await fetch('/api/admin/listUsers');
       const data = await res.json();
-      if (res.ok) setUsersList(data);
+      if (res.ok) setUsersList(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Users load error:', err);
     }
@@ -208,7 +208,7 @@ export default function Page() {
     try {
       const res = await fetch('/api/admin/getAuditLogs');
       const data = await res.json();
-      if (res.ok) setAuditLogs(data);
+      if (res.ok) setAuditLogs(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Audit logs load error:', err);
     }
