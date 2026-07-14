@@ -5,8 +5,8 @@ import { query } from '../../_utils/db';
 export async function GET(req) {
   try {
     const session = getSessionFromRequest(req);
-    if (!session || session.role !== 'admin') {
-      return NextResponse.json({ error: 'ACCESS_DENIED: Admin permissions required.' }, { status: 403 });
+    if (!session || (session.role !== 'admin' && session.role !== 'LYDC' && session.role !== 'encoder')) {
+      return NextResponse.json({ error: 'ACCESS_DENIED: Restricted access.' }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);

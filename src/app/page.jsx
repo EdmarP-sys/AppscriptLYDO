@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import KpiCards from './components/KpiCards';
 import DocumentTable from './components/DocumentTable';
-import ScholarRegistrationModal from './components/ScholarRegistrationModal';
-import ScholarDashboard from './components/ScholarDashboard';
-import AdminScholarTracker from './components/AdminScholarTracker';
+import OfficerRegistrationModal from './components/OfficerRegistrationModal';
+import ScholarList from './components/ScholarList';
 import AnalyticsTab from './components/AnalyticsTab';
 import { BARANGAYS, LYDC_CENTERS } from './api/_utils/constants';
 
@@ -30,12 +29,11 @@ export default function Page() {
   const [sessionChecked, setSessionChecked] = useState(false);
   
   // Login States
-  const [portalMode, setPortalMode] = useState(null); // 'officer' or 'scholar'
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isOfficerRegisterOpen, setIsOfficerRegisterOpen] = useState(false);
 
   // Active Tab
   const [activeTab, setActiveTab] = useState('home');
@@ -263,8 +261,8 @@ export default function Page() {
       setPassword('');
 
       // Enforce default routing
-      if (data.user.role === 'scholar') {
-        setActiveTab('dashboard');
+      if (data.user.role === 'encoder') {
+        setActiveTab('scholar-list');
       } else {
         setActiveTab('home');
         if (data.user.role === 'SK' || data.user.role === 'LYDC') {
@@ -284,7 +282,6 @@ export default function Page() {
     try {
       await fetch('/api/logout', { method: 'POST' });
       setUser(null);
-      setPortalMode(null);
       setAnalytics(null);
       setDocuments([]);
       setPendingDocs([]);
@@ -508,130 +505,76 @@ export default function Page() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-light/20 rounded-full blur-[150px] pointer-events-none" />
 
         {/* Portal Gateway Selection */}
-        {!portalMode ? (
-          <div className="w-full max-w-2xl text-center flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-8 duration-500">
-            <div>
-              <div className="w-20 h-20 rounded-full bg-gold-gradient flex items-center justify-center font-bold text-forest-dark text-3xl shadow-xl border border-gold/30 mx-auto mb-4 glow-btn">
-                LY
-              </div>
-              <h1 className="text-4xl font-extrabold text-gold-gradient tracking-tight">Palayan City Youth Portal</h1>
-              <p className="text-white/70 text-sm mt-2">Local Youth Development Office Information Management System</p>
+        <div className="w-full max-w-md glass-panel border border-gold/25 rounded-2xl overflow-hidden shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+          {/* Form Header */}
+          <div className="px-6 pt-12 pb-6 border-b border-white/10 text-center bg-white/5">
+            <div className="w-16 h-16 rounded-full bg-gold-gradient flex items-center justify-center font-bold text-forest-dark text-2xl shadow-xl border border-gold/30 mx-auto mb-4 glow-btn">
+              LY
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-              {/* Officer Option */}
-              <button
-                onClick={() => setPortalMode('officer')}
-                className="glass-panel hover:border-gold/50 rounded-2xl p-8 flex flex-col items-center gap-4 transition-all hover:scale-105 group text-white cursor-pointer"
-              >
-                <div className="p-4 bg-white/5 group-hover:bg-gold/15 rounded-full border border-white/10 group-hover:border-gold/35 shadow-inner transition-all">
-                  <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white group-hover:text-gold-gradient">Officer / Admin Portal</h3>
-                  <p className="text-white/50 text-xs mt-1 max-w-xs">Access for LYDO Staff, Administrators, and Barangay SK Chairpersons</p>
-                </div>
-              </button>
-
-              {/* Scholar Option */}
-              <button
-                onClick={() => setPortalMode('scholar')}
-                className="glass-panel hover:border-gold/50 rounded-2xl p-8 flex flex-col items-center gap-4 transition-all hover:scale-105 group text-white cursor-pointer"
-              >
-                <div className="p-4 bg-white/5 group-hover:bg-gold/15 rounded-full border border-white/10 group-hover:border-gold/35 shadow-inner transition-all">
-                  <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white group-hover:text-gold-gradient">Scholar Gateway</h3>
-                  <p className="text-white/50 text-xs mt-1 max-w-xs">Access for student financial assistance applicants and active scholars</p>
-                </div>
-              </button>
-            </div>
+            <h2 className="text-2xl font-bold text-gold-gradient capitalize">Portal Sign In</h2>
+            <p className="text-xs text-white/50 mt-1">Please enter your portal access credentials</p>
           </div>
-        ) : (
-          /* LOGIN SCREEN */
-          <div className="w-full max-w-md glass-panel border border-gold/25 rounded-2xl overflow-hidden shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
-            {/* Back to modes */}
+
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="p-6 flex flex-col gap-4">
+            {loginError && (
+              <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-lg">
+                {loginError}
+              </div>
+            )}
+
+            <div className="flex flex-col">
+              <label className="input-label">Username</label>
+              <input
+                type="text"
+                required
+                placeholder="Enter username"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                className="input-field text-sm font-mono"
+                disabled={loginLoading}
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="input-label">Password</label>
+              <input
+                type="password"
+                required
+                placeholder="Enter password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="input-field text-sm"
+                disabled={loginLoading}
+              />
+            </div>
+
             <button
-              onClick={() => {
-                setPortalMode(null);
-                setLoginError('');
-              }}
-              className="absolute top-4 left-4 text-white/50 hover:text-white flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer"
+              type="submit"
+              disabled={loginLoading}
+              className="w-full mt-2 py-3 bg-gold-gradient text-forest-dark font-extrabold text-sm rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg glow-btn cursor-pointer disabled:opacity-50"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-              Gateway
+              {loginLoading ? 'Authenticating...' : 'Sign In'}
             </button>
 
-            {/* Form Header */}
-            <div className="px-6 pt-12 pb-6 border-b border-white/10 text-center bg-white/5">
-              <h2 className="text-2xl font-bold text-gold-gradient capitalize">{portalMode} Sign In</h2>
-              <p className="text-xs text-white/50 mt-1">Please enter your portal access credentials</p>
-            </div>
-
-            {/* Login Form */}
-            <form onSubmit={handleLogin} className="p-6 flex flex-col gap-4">
-              {loginError && (
-                <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-lg">
-                  {loginError}
-                </div>
-              )}
-
-              <div className="flex flex-col">
-                <label className="input-label">Username</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Enter username"
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  className="input-field text-sm font-mono"
-                  disabled={loginLoading}
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <label className="input-label">Password</label>
-                <input
-                  type="password"
-                  required
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="input-field text-sm"
-                  disabled={loginLoading}
-                />
-              </div>
-
+            <div className="text-center mt-3 flex flex-col gap-2">
+              <span className="text-xs text-white/50">New SK or LYDO Officer? </span>
               <button
-                type="submit"
-                disabled={loginLoading}
-                className="w-full mt-2 py-3 bg-gold-gradient text-forest-dark font-extrabold text-sm rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg glow-btn cursor-pointer disabled:opacity-50"
+                type="button"
+                onClick={() => setIsOfficerRegisterOpen(true)}
+                className="text-xs text-gold font-bold hover:underline transition-all cursor-pointer"
               >
-                {loginLoading ? 'Authenticating...' : 'Sign In'}
+                Register Officer Account
               </button>
+            </div>
+          </form>
+        </div>
 
-              {portalMode === 'scholar' && (
-                <div className="text-center mt-3">
-                  <span className="text-xs text-white/50">New applicant? </span>
-                  <button
-                    type="button"
-                    onClick={() => setIsRegisterOpen(true)}
-                    className="text-xs text-gold font-bold hover:underline transition-all cursor-pointer"
-                  >
-                    Register as Scholar
-                  </button>
-                </div>
-              )}
-            </form>
-          </div>
-        )}
-
-        {/* Scholar registration modal */}
-        {isRegisterOpen && (
-          <ScholarRegistrationModal
-            isOpen={isRegisterOpen}
-            onClose={() => setIsRegisterOpen(false)}
+        {/* Officer registration modal */}
+        {isOfficerRegisterOpen && (
+          <OfficerRegistrationModal
+            isOpen={isOfficerRegisterOpen}
+            onClose={() => setIsOfficerRegisterOpen(false)}
           />
         )}
       </main>
@@ -655,8 +598,14 @@ export default function Page() {
       {/* Main Workspace Panels */}
       <main className="flex-1 ml-64 p-8 min-h-screen overflow-y-auto flex flex-col gap-8">
         
+        {activeTab === 'scholar-list' && (
+          <div className="animate-in fade-in duration-300">
+            <ScholarList user={user} />
+          </div>
+        )}
+
         {/* TAB 1: HOME (DOCUMENT PORTAL DASHBOARD) */}
-        {activeTab === 'home' && user.role !== 'scholar' && (
+        {activeTab === 'home' && user.role !== 'scholar' && user.role !== 'encoder' && (
           <div className="flex flex-col gap-8 animate-in fade-in duration-300">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 pb-4">

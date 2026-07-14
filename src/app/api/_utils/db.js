@@ -56,66 +56,57 @@ function getPool() {
 let mockUsers = [
   { username: 'admin', password_hash: '$2b$10$pxBfx8kWYuOrntklVC1Dxefc9LqE/1FDx3JCYORQkt4mbT6YE9.8.', role: 'admin', display_name: 'System Administrator', barangay: null, created_at: new Date().toISOString() },
   { username: 'scholar', password_hash: '$2b$10$pxBfx8kWYuOrntklVC1Dxefc9LqE/1FDx3JCYORQkt4mbT6YE9.8.', role: 'scholar', display_name: 'Jane Doe', barangay: 'Atate', created_at: new Date().toISOString() },
-  { username: 'sk_atate', password_hash: '$2b$10$pxBfx8kWYuOrntklVC1Dxefc9LqE/1FDx3JCYORQkt4mbT6YE9.8.', role: 'SK', display_name: 'Atate SK Chairman', barangay: 'Atate', created_at: new Date().toISOString() }
+  { username: 'sk_atate', password_hash: '$2b$10$pxBfx8kWYuOrntklVC1Dxefc9LqE/1FDx3JCYORQkt4mbT6YE9.8.', role: 'SK', display_name: 'Atate SK Chairman', barangay: 'Atate', created_at: new Date().toISOString() },
+  { username: 'encoder1', password_hash: '$2b$10$iui9yCS2fqFFOTsjeBq4Jua1ts9mKHWsKVXvN6SlDGadfaFGCY6wS', role: 'encoder', display_name: 'Encoder 1', barangay: null, created_at: new Date().toISOString() },
+  { username: 'encoder2', password_hash: '$2b$10$iui9yCS2fqFFOTsjeBq4Jua1ts9mKHWsKVXvN6SlDGadfaFGCY6wS', role: 'encoder', display_name: 'Encoder 2', barangay: null, created_at: new Date().toISOString() },
+  { username: 'encoder3', password_hash: '$2b$10$iui9yCS2fqFFOTsjeBq4Jua1ts9mKHWsKVXvN6SlDGadfaFGCY6wS', role: 'encoder', display_name: 'Encoder 3', barangay: null, created_at: new Date().toISOString() },
+  { username: 'encoder4', password_hash: '$2b$10$iui9yCS2fqFFOTsjeBq4Jua1ts9mKHWsKVXvN6SlDGadfaFGCY6wS', role: 'encoder', display_name: 'Encoder 4', barangay: null, created_at: new Date().toISOString() },
+  { username: 'encoder5', password_hash: '$2b$10$iui9yCS2fqFFOTsjeBq4Jua1ts9mKHWsKVXvN6SlDGadfaFGCY6wS', role: 'encoder', display_name: 'Encoder 5', barangay: null, created_at: new Date().toISOString() }
 ];
 
 let mockApplications = [
   {
     id: 'app-1',
-    username: 'scholar',
-    application_no: 'APP-2026-0001',
+    application_no: 'AFS-00001',
     date_filed: new Date(Date.now() - 2*24*60*60*1000).toISOString(),
-    semester_sy: 'S.Y. 2026-2027 1st Semester',
-    last_name: 'Doe',
-    first_name: 'Jane',
-    middle_name: 'Marie',
-    suffix: '',
+    student_full_name: 'Jane M. Doe',
     date_of_birth: '2005-08-12',
     sex: 'Female',
-    civil_status: 'Single',
     contact_number: '09123456789',
-    address: 'Purok 3, Atate, Palayan City',
     barangay: 'Atate',
     email: 'jane.doe@example.com',
-    school_enrolled: 'Nueva Ecija University of Science and Technology',
-    course_program: 'BS in Information Technology',
-    year_level: '2nd Year',
-    student_id_no: 'NEUST-2024-0512',
-    gwa: 1.45,
-    gwa_scale: '5',
-    q1_grade: 1.5,
-    q2_grade: 1.3,
-    q3_grade: 1.4,
-    q4_grade: 1.6,
-    parent_guardian_name: 'John Doe',
-    relationship: 'Father',
-    parent_contact: '09876543210',
-    monthly_income: 15000,
-    num_dependents: 3,
-    source_of_income: 'Farming',
+    school: 'Nueva Ecija University of Science and Technology',
+    school_year: '2026-2027',
     is_solo_parent_beneficiary: false,
     is_orphan: false,
     is_pwd: false,
     is_ip: false,
     is_out_of_school_youth: false,
-    is_marginalized: false,
     special_circumstances_specify: '',
-    leadership_activities: 'President of Supreme Student Council',
-    letter_to_mayor_url: 'https://docs.google.com/viewer?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    valid_id_url: 'https://docs.google.com/viewer?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    enrollment_cert_url: 'https://docs.google.com/viewer?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    grade_transcript_url: 'https://docs.google.com/viewer?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    barangay_clearance_url: 'https://docs.google.com/viewer?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    special_id_url: null,
-    score_academic: 28,
-    score_socio_economic: 25,
-    score_leadership: 15,
-    score_interview: 14,
-    score_special_circumstances: 8,
-    score_total: 90,
-    evaluator_remarks: 'Excellent student with strong leadership capabilities.',
     status: 'Approved',
     evaluated_by: 'admin',
+    evaluated_at: new Date().toISOString()
+  },
+  {
+    id: 'app-2',
+    application_no: 'AFS-00002',
+    date_filed: new Date(Date.now() - 1*24*60*60*1000).toISOString(),
+    student_full_name: 'John A. Smith',
+    date_of_birth: '2004-03-22',
+    sex: 'Male',
+    contact_number: '09876543210',
+    barangay: 'Atate',
+    email: 'john.smith@example.com',
+    school: 'Central Luzon State University',
+    school_year: '2026-2027',
+    is_solo_parent_beneficiary: true,
+    is_orphan: false,
+    is_pwd: false,
+    is_ip: false,
+    is_out_of_school_youth: false,
+    special_circumstances_specify: 'Living with mother who is solo parent',
+    status: 'Pending',
+    evaluated_by: 'encoder1',
     evaluated_at: new Date().toISOString()
   }
 ];
@@ -408,88 +399,56 @@ function resolveMockQuery(text, params = []) {
     return { rows: [], rowCount: 1 };
   }
 
-  // 24. INSERT / UPDATE scholar_applications
+  // 24. INSERT INTO scholar_applications
   if (sql.includes('INSERT INTO scholar_applications')) {
-    const existingIdx = mockApplications.findIndex(a => a.username === params[0]);
+    const nextVal = mockApplications.length + 1;
+    const applicationNo = 'AFS-' + String(nextVal).padStart(5, '0');
     const newApp = {
-      id: params[0] + '-id',
-      username: params[0],
-      semester_sy: params[1],
-      last_name: params[2],
-      first_name: params[3],
-      middle_name: params[4],
-      suffix: params[5],
-      date_of_birth: params[6],
-      sex: params[7],
-      civil_status: params[8],
-      contact_number: params[9],
-      address: params[10],
-      barangay: params[11],
-      email: params[12],
-      school_enrolled: params[13],
-      course_program: params[14],
-      year_level: params[15],
-      student_id_no: params[16],
-      gwa: params[17],
-      gwa_scale: params[18],
-      q1_grade: params[19],
-      q2_grade: params[20],
-      q3_grade: params[21],
-      q4_grade: params[22],
-      parent_guardian_name: params[23],
-      relationship: params[24],
-      parent_contact: params[25],
-      monthly_income: params[26],
-      num_dependents: params[27],
-      source_of_income: params[28],
-      is_solo_parent_beneficiary: params[29],
-      is_orphan: params[30],
-      is_pwd: params[31],
-      is_ip: params[32],
-      is_out_of_school_youth: params[33],
-      is_marginalized: params[34],
-      special_circumstances_specify: params[35],
-      leadership_activities: params[36],
-      letter_to_mayor_url: params[39] || 'https://example.com',
-      valid_id_url: params[41] || 'https://example.com',
-      enrollment_cert_url: params[43] || 'https://example.com',
-      grade_transcript_url: params[45] || 'https://example.com',
-      barangay_clearance_url: params[47] || 'https://example.com',
-      special_id_url: params[49],
-      status: 'Pending',
-      date_filed: new Date().toISOString()
+      id: 'app-' + nextVal,
+      application_no: applicationNo,
+      date_filed: new Date().toISOString(),
+      student_full_name: params[0],
+      date_of_birth: params[1],
+      sex: params[2],
+      barangay: params[3],
+      contact_number: params[4],
+      email: params[5],
+      school: params[6],
+      school_year: params[7],
+      is_solo_parent_beneficiary: params[8],
+      is_orphan: params[9],
+      is_pwd: params[10],
+      is_ip: params[11],
+      is_out_of_school_youth: params[12],
+      special_circumstances_specify: params[13],
+      status: params[14],
+      evaluated_by: params[15],
+      evaluated_at: new Date().toISOString()
     };
-
-    if (existingIdx !== -1) {
-      // Retain scores on updates
-      newApp.score_academic = mockApplications[existingIdx].score_academic || 0;
-      newApp.score_socio_economic = mockApplications[existingIdx].score_socio_economic || 0;
-      newApp.score_leadership = mockApplications[existingIdx].score_leadership || 0;
-      newApp.score_interview = mockApplications[existingIdx].score_interview || 0;
-      newApp.score_special_circumstances = mockApplications[existingIdx].score_special_circumstances || 0;
-      newApp.score_total = mockApplications[existingIdx].score_total || 0;
-      newApp.evaluator_remarks = mockApplications[existingIdx].evaluator_remarks || '';
-      mockApplications[existingIdx] = newApp;
-    } else {
-      mockApplications.push(newApp);
-    }
-    return { rows: [], rowCount: 1 };
+    mockApplications.push(newApp);
+    return { rows: [{ application_no: applicationNo }], rowCount: 1 };
   }
 
-  // 25. UPDATE scholar_applications (Scoring Evaluation)
-  if (sql.includes('UPDATE scholar_applications') && sql.includes('score_academic = $1')) {
-    const existing = mockApplications.find(a => a.id === params[9]);
-    if (existing) {
-      existing.score_academic = params[0];
-      existing.score_socio_economic = params[1];
-      existing.score_leadership = params[2];
-      existing.score_interview = params[3];
-      existing.score_special_circumstances = params[4];
-      existing.score_total = params[5];
-      existing.evaluator_remarks = params[6];
-      existing.status = params[7];
-      existing.evaluated_by = params[8];
-      existing.evaluated_at = new Date().toISOString();
+  // 25. UPDATE scholar_applications
+  if (sql.includes('UPDATE scholar_applications')) {
+    const app = mockApplications.find(a => a.id === params[15]);
+    if (app) {
+      app.student_full_name = params[0];
+      app.date_of_birth = params[1];
+      app.sex = params[2];
+      app.barangay = params[3];
+      app.contact_number = params[4];
+      app.email = params[5];
+      app.school = params[6];
+      app.school_year = params[7];
+      app.is_solo_parent_beneficiary = params[8];
+      app.is_orphan = params[9];
+      app.is_pwd = params[10];
+      app.is_ip = params[11];
+      app.is_out_of_school_youth = params[12];
+      app.special_circumstances_specify = params[13];
+      app.status = params[14];
+      app.evaluated_at = new Date().toISOString();
     }
     return { rows: [], rowCount: 1 };
   }

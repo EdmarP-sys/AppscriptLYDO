@@ -5,6 +5,7 @@ export default function Sidebar({ activeTab, setActiveTab, user, onLogout }) {
 
   const isAdmin = user.role === 'admin';
   const isOfficer = user.role === 'SK' || user.role === 'LYDC';
+  const isEncoder = user.role === 'encoder';
   const isScholar = user.role === 'scholar';
 
   const adminMenu = [
@@ -23,7 +24,7 @@ export default function Sidebar({ activeTab, setActiveTab, user, onLogout }) {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
       </svg>
     )},
-    { id: 'scholars', label: 'Scholar Applications', icon: (
+    { id: 'scholar-list', label: 'Scholar List', icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
       </svg>
@@ -60,6 +61,19 @@ export default function Sidebar({ activeTab, setActiveTab, user, onLogout }) {
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
+    )},
+    { id: 'scholar-list', label: 'Scholar List', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    )}
+  ];
+
+  const encoderMenu = [
+    { id: 'scholar-list', label: 'Scholar List', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
     )}
   ];
 
@@ -76,7 +90,7 @@ export default function Sidebar({ activeTab, setActiveTab, user, onLogout }) {
     )}
   ];
 
-  const menuItems = isAdmin ? adminMenu : (isScholar ? scholarMenu : officerMenu);
+  const menuItems = isAdmin ? adminMenu : (isEncoder ? encoderMenu : (isScholar ? scholarMenu : officerMenu));
 
   return (
     <aside className="w-64 h-screen fixed left-0 top-0 glass-panel flex flex-col justify-between text-white p-6 z-40 border-r border-gold/20">

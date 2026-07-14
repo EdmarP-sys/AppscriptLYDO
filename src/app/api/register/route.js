@@ -4,10 +4,18 @@ import { query } from '../_utils/db';
 
 export async function POST(req) {
   try {
-    const { username, password, displayName, barangay } = await req.json();
+    const { username, password, displayName, role, barangay } = await req.json();
 
-    if (!username || !password || !displayName || !barangay) {
+    if (!username || !password || !displayName || !role) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
+    }
+
+    if (role !== 'SK' && role !== 'LYDC') {
+      return NextResponse.json({ error: 'Invalid role for self-registration.' }, { status: 400 });
+    }
+    
+    if (role === 'SK' && !barangay) {
+      return NextResponse.json({ error: 'Barangay is required for SK.' }, { status: 400 });
     }
 
     const cleanedUsername = username.toLowerCase().trim();
@@ -30,13 +38,13 @@ export async function POST(req) {
     await query(
       `INSERT INTO users (username, password_hash, role, barangay, display_name)
        VALUES ($1, $2, $3, $4, $5)`,
-      [cleanedUsername, passwordHash, 'scholar', barangay, displayName]
+      [cleanedUsername, passwordHash, role, role === 'SK' ? barangay : null, displayName]
     );
 
     // Add audit log
     await query(
       `INSERT INTO audit_logs (actor, action, details) VALUES ($1, $2, $3)`,
-      [cleanedUsername, 'USER_REGISTER', `Scholar self-registered: ${cleanedUsername} from Barangay ${barangay}`]
+      [cleanedUsername, 'USER_REGISTER', `Officer self-registered: ${cleanedUsername} as ${role}`]
     );
 
     return NextResponse.json({ success: true, message: 'Registration successful! You can now log in.' });
